@@ -201,7 +201,7 @@ function updateProfileDisplay() {
 function createNewAccount() {
     const newPseudo = document.getElementById("changePseudo").value.trim();
     if (!newPseudo) {
-        showStatusMessage("Veuillez entrer un pseudo valide", "error");
+        showStatusMessage("Please enter a valid username", "error");
         return;
     }
 
@@ -219,12 +219,12 @@ function createNewAccount() {
             localStorage.setItem("uid", uid);
 
             updateProfileDisplay();
-            showStatusMessage("Nouveau compte créé avec succès!", "success");
+            showStatusMessage("New account successfully created!", "success");
             startLeaderboardUpdates();
             startScoreSubmitInterval();
         })
         .catch(error => {
-            showStatusMessage("Erreur de connexion au serveur", "error");
+            showStatusMessage("Failed to conntect to server", "error");
             console.error("Error:", error);
         });
 }
@@ -232,7 +232,7 @@ function createNewAccount() {
 function fetchAccount() {
     const fetchUid = document.getElementById("fetchUid").value.trim();
     if (!fetchUid) {
-        showStatusMessage("Veuillez entrer un UID valide", "error");
+        showStatusMessage("Please enter a valid UId", "error");
         return;
     }
 
@@ -251,12 +251,12 @@ function fetchAccount() {
 
             document.getElementById("profileScore").textContent = data.score || 0;
             updateProfileDisplay();
-            showStatusMessage("Compte récupéré avec succès!", "success");
+            showStatusMessage("Account successfully fetched!", "success");
             startLeaderboardUpdates();
             startScoreSubmitInterval();
         })
         .catch(error => {
-            showStatusMessage("Erreur de connexion au serveur", "error");
+            showStatusMessage("Failed to connect to server", "error");
             console.error("Error:", error);
         });
 }
@@ -476,7 +476,7 @@ document.getElementById("submitPseudo").addEventListener("click", () => {
             })
             .catch(error => {
                 console.error("Error:", error);
-                alert("Erreur lors de la création du compte. Veuillez réessayer.");
+                alert("Failed to create an account.");
             });
     }
 });
