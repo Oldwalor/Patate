@@ -1,4 +1,4 @@
-# Potato - That one goofy ahhhh ai made jumper
+# Potato
 
 Idk it's hosted on [potato.theserver.life](https://potato.theserver.life)
 
