@@ -59,6 +59,19 @@ try {
             respondWithError("Failed to drop leaderboard table.");
         }
 
+    } elseif (isset($_GET['fetchPlayers']) && $_GET['fetchPlayers'] === $resetPassword) {
+        $stmt = $conn->prepare("SELECT uid, pseudo, score, games_played, flagged, last_update FROM leaderboard");
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $players = [];
+        while ($row = $result->fetch_assoc()) {
+            $players[] = $row;
+        }
+        $stmt->close();
+
+        respondWithSuccess(["players" => $players]);
+
     } else {
         require_once("leaderboard.php");
     }
