@@ -80,6 +80,7 @@ export function fetchUserData() {
         .then(data => {
             if (!data.error) {
                 document.getElementById("profileScore").textContent = data.score || 0;
+                document.getElementById("gamesPlayed").textContent = data.games_played || 0;
             }
         })
         .catch(error => {
