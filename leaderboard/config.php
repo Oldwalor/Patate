@@ -25,7 +25,7 @@ $dbUser = "dbuser";
 $dbPass = "dbpass";
 $dbName = "dbname";
 
-# Pasword reset for ?drop=<pass>
+# Pasword reset for admin utilites
 $resetPassword = "adminpass123";
 
 # Anti-cheat configuration
