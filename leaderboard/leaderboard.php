@@ -23,7 +23,7 @@ Leaderboard API
 require_once("utils.php");
 
 function getTopTenScores($conn) {
-    $stmt = $conn->prepare("SELECT pseudo, uid, score FROM leaderboard ORDER BY score DESC LIMIT 10");
+    $stmt = $conn->prepare("SELECT pseudo, uid, score FROM leaderboard WHERE flagged = FALSE ORDER BY score DESC LIMIT 10");
     $stmt->execute();
     $result = $stmt->get_result();
     
