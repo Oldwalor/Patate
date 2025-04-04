@@ -81,6 +81,12 @@ export function fetchUserData() {
             if (!data.error) {
                 document.getElementById("profileScore").textContent = data.score || 0;
                 document.getElementById("gamesPlayed").textContent = data.games_played || 0;
+                
+                if (data.flagged === 1) {
+                    import('./ui.js').then(ui => {
+                        ui.showWarningBanner();
+                    });
+                }
             }
         })
         .catch(error => {
