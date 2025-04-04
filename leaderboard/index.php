@@ -48,6 +48,11 @@ if (isset($_GET['flagAccount'])) {
     exit;
 }
 
+if (isset($_GET['fetchPlayers'])) {
+    require_once("adminActions.php");
+    exit;
+}
+
 if (isset($_GET['create'])) {
     require_once("userCreate.php");
     exit;
