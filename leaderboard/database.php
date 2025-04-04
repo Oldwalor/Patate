@@ -37,9 +37,11 @@ function initializeDatabase($conn) {
             uid VARCHAR(255) NOT NULL UNIQUE,
             pseudo VARCHAR(255) NOT NULL,
             score INT NOT NULL,
-            last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            games_played INT DEFAULT 1
+            games_played INT DEFAULT 1,
+            flagged BOOLEAN DEFAULT FALSE,
+            last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
+
     ";
     $conn->query($createTableQuery);
 }
