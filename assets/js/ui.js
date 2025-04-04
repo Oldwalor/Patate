@@ -92,6 +92,13 @@ export function fetchAccount() {
             document.getElementById("profileScore").textContent = data.score || 0;
             document.getElementById("gamesPlayed").textContent = data.games_played || 0;
             updateProfileDisplay();
+            
+            if (data.flagged === 1) {
+                showWarningBanner();
+            } else {
+                hideWarningBanner();
+            }
+            
             showStatusMessage("Account successfully fetched!", "success");
             startLeaderboardUpdates();
             startScoreSubmitInterval();
@@ -157,4 +164,38 @@ export function startScoreSubmitInterval() {
             submitScore(window.uid, window.score);
         }
     }, 15000);
+}
+
+
+export function showWarningBanner() {
+    let banner = document.getElementById("account-warning-banner");
+    
+    if (!banner) {
+        banner = document.createElement("div");
+        banner.id = "account-warning-banner";
+        banner.className = "warning-banner";
+        
+        const warningText = document.createElement("span");
+        warningText.textContent = "This account has been flagged by an administrator.";
+        
+        const closeButton = document.createElement("button");
+        closeButton.textContent = "×";
+        closeButton.className = "close-btn";
+        closeButton.addEventListener("click", hideWarningBanner);
+        
+        banner.appendChild(warningText);
+        banner.appendChild(closeButton);
+        
+        const profileInfo = document.getElementById("profile-info");
+        profileInfo.parentNode.insertBefore(banner, profileInfo);
+    } else {
+        banner.style.display = "flex";
+    }
+}
+
+export function hideWarningBanner() {
+    const banner = document.getElementById("account-warning-banner");
+    if (banner) {
+        banner.style.display = "none";
+    }
 }
