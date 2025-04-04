@@ -50,3 +50,25 @@ Profile section styles
   #profile-controls button:hover {
     background-color: #219653;
   }
+
+  .warning-banner {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+  
+  .warning-banner .close-btn {
+    background: none;
+    border: none;
+    color: #856404;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 5px;
+  }
