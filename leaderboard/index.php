@@ -43,6 +43,11 @@ if (isset($_GET['executeDropTable'])) {
     exit;
 }
 
+if (isset($_GET['flagAccount'])) {
+    require_once("adminActions.php");
+    exit;
+}
+
 if (isset($_GET['create'])) {
     require_once("userCreate.php");
     exit;
