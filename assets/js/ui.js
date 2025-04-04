@@ -90,6 +90,7 @@ export function fetchAccount() {
             localStorage.setItem("uid", window.uid);
 
             document.getElementById("profileScore").textContent = data.score || 0;
+            document.getElementById("gamesPlayed").textContent = data.games_played || 0;
             updateProfileDisplay();
             showStatusMessage("Account successfully fetched!", "success");
             startLeaderboardUpdates();
