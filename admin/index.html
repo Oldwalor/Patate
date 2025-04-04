@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<!--
+
+'||''|.   ..|''||   |''||''|     |     |''||''|  ..|''||   
+ ||   || .|'    ||     ||       |||       ||    .|'    ||  
+ ||...|' ||      ||    ||      |  ||      ||    ||      || 
+ ||      '|.     ||    ||     .''''|.     ||    '|.     || 
+.||.      ''|...|'    .||.   .|.  .||.   .||.    ''|...|'  
+                                                           
+                                                           
+POTATO.THESERVER.LIFE
+LICENSE GPL-3.0
+
+-------------------------------
+admin/index.html
+-
+Website Admin page
+-->
+
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Potato Game</title>
+    <link href="../assets/img/potato.png" rel="icon">
+
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #2c3e50;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .login-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .login-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        
+        .login-card h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #3c5a80;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+        }
+        
+        .btn-warning:hover {
+            background-color: #d35400;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .dashboard {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .dashboard-title {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+        }
+        
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .player-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .flagged {
+            background-color: #fff8e1;
+        }
+        
+        .flagged td:first-child {
+            border-left: 4px solid var(--warning);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 400px;
+            text-align: center;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateX(120%);
+            transition: transform 0.3s ease-out;
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .player-details {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .player-details h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .detail-card {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .detail-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-value {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+        
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .search-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        #searchInput {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginScreen">
+        <div class="login-card">
+            <h2>Admin Dashboard</h2>
+            <form class="login-form" id="loginForm">
+                <input type="password" id="passwordInput" placeholder="Enter admin password" required>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="dashboard" id="dashboardScreen">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Game Administration</h1>
+            <div class="action-buttons">
+                <button id="refreshBtn" class="btn">Refresh Data</button>
+                <button id="resetBtn" class="btn btn-danger">Reset Leaderboard</button>
+                <button id="logoutBtn" class="btn btn-warning">Logout</button>
+            </div>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search players...">
+        </div>
+        
+        <div class="loader" id="loader"></div>
+        
+        <table id="playersTable">
+            <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Score</th>
+                    <th>Games Played</th>
+                    <th>Last Update</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="playersTableBody">
+            </tbody>
+        </table>
+        
+        <div class="player-details" id="playerDetails">
+            <h3>Player Details: <span id="detailsPlayerName"></span></h3>
+            <div class="details-grid">
+                <div class="detail-card">
+                    <div class="detail-label">Player ID</div>
+                    <div class="detail-value" id="detailsPlayerId"></div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-label">Score</div>
+                    <div class="detail-value" id="detailsScore"></div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-label">Games Played</div>
+                    <div class="detail-value" id="detailsGamesPlayed"></div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-label">Last Update</div>
+                    <div class="detail-value" id="detailsLastUpdate"></div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value" id="detailsStatus"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="resetModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Reset Leaderboard</h3>
+            <p>Are you sure you want to reset the entire leaderboard? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button id="cancelResetBtn" class="btn">Cancel</button>
+                <button id="confirmResetBtn" class="btn btn-danger">Reset</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="flagModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Change Player Status</h3>
+            <p id="flagModalText">Are you sure you want to change the status of this player?</p>
+            <div class="modal-buttons">
+                <button id="cancelFlagBtn" class="btn">Cancel</button>
+                <button id="confirmFlagBtn" class="btn btn-warning">Confirm</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <script>
+        let selectedPlayerId = '';
+        let players = [];
+        const API_ENDPOINT = 'potato.theserver.life/leaderboard';
+        
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboardScreen = document.getElementById('dashboardScreen');
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const playersTable = document.getElementById('playersTable');
+        const playersTableBody = document.getElementById('playersTableBody');
+        const resetBtn = document.getElementById('resetBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const resetModal = document.getElementById('resetModal');
+        const cancelResetBtn = document.getElementById('cancelResetBtn');
+        const confirmResetBtn = document.getElementById('confirmResetBtn');
+        const flagModal = document.getElementById('flagModal');
+        const flagModalText = document.getElementById('flagModalText');
+        const cancelFlagBtn = document.getElementById('cancelFlagBtn');
+        const confirmFlagBtn = document.getElementById('confirmFlagBtn');
+        const notification = document.getElementById('notification');
+        const loader = document.getElementById('loader');
+        const playerDetails = document.getElementById('playerDetails');
+        const detailsPlayerName = document.getElementById('detailsPlayerName');
+        const detailsPlayerId = document.getElementById('detailsPlayerId');
+        const detailsScore = document.getElementById('detailsScore');
+        const detailsGamesPlayed = document.getElementById('detailsGamesPlayed');
+        const detailsLastUpdate = document.getElementById('detailsLastUpdate');
+        const detailsStatus = document.getElementById('detailsStatus');
+        const searchInput = document.getElementById('searchInput');
+        
+        // Functions
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function toggleLoader(show) {
+            loader.style.display = show ? 'block' : 'none';
+            playersTable.style.display = show ? 'none' : 'table';
+        }
+        
+        async function fetchPlayers() {
+            toggleLoader(true);
+            
+            try {
+                const password = passwordInput.value;
+                const response = await fetch(`https://${API_ENDPOINT}?fetchPlayers=${password}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    showNotification(data.error, 'error');
+                    return null;
+                }
+                
+                return data.players || [];
+            } catch (error) {
+                showNotification('Failed to fetch players data', 'error');
+                return null;
+            } finally {
+                toggleLoader(false);
+            }
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString();
+        }
+        
+        function renderPlayersTable(playersData) {
+            playersTableBody.innerHTML = '';
+            
+            if (!playersData || playersData.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `
+                    <td colspan="6" style="text-align: center;">No players found</td>
+                `;
+                playersTableBody.appendChild(emptyRow);
+                return;
+            }
+            
+            playersData.forEach(player => {
+                const row = document.createElement('tr');
+                if (player.flagged === '1' || player.flagged === 1) {
+                    row.classList.add('flagged');
+                }
+                
+                row.innerHTML = `
+                    <td>${player.pseudo}</td>
+                    <td>${player.score}</td>
+                    <td>${player.games_played}</td>
+                    <td>${formatDate(player.last_update)}</td>
+                    <td>${player.flagged === '1' || player.flagged === 1 ? 'Flagged' : 'Active'}</td>
+                    <td class="player-actions">
+                        <button class="btn btn-warning flag-btn" data-id="${player.uid}" data-flagged="${player.flagged}">
+                            ${player.flagged === '1' || player.flagged === 1 ? 'Unflag' : 'Flag'}
+                        </button>
+                        <button class="btn details-btn" data-id="${player.uid}">Details</button>
+                    </td>
+                `;
+                playersTableBody.appendChild(row);
+            });
+            
+            document.querySelectorAll('.flag-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    selectedPlayerId = this.dataset.id;
+                    const isFlagged = this.dataset.flagged === '1' || this.dataset.flagged === 1;
+                    flagModalText.textContent = `Are you sure you want to ${isFlagged ? 'unflag' : 'flag'} this player?`;
+                    flagModal.style.display = 'flex';
+                });
+            });
+            
+            document.querySelectorAll('.details-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const playerId = this.dataset.id;
+                    showPlayerDetails(playerId);
+                });
+            });
+        }
+        
+        function showPlayerDetails(playerId) {
+            const player = players.find(p => p.uid === playerId);
+            if (!player) return;
+            
+            detailsPlayerName.textContent = player.pseudo;
+            detailsPlayerId.textContent = player.uid;
+            detailsScore.textContent = player.score;
+            detailsGamesPlayed.textContent = player.games_played;
+            detailsLastUpdate.textContent = formatDate(player.last_update);
+            detailsStatus.textContent = player.flagged === '1' || player.flagged === 1 ? 'Flagged' : 'Active';
+            
+            playerDetails.style.display = 'block';
+        }
+        
+        async function flagPlayer(playerId) {
+            try {
+                const password = passwordInput.value;
+                const response = await fetch(`https://${API_ENDPOINT}?flagAccount=${playerId}&pass=${password}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    showNotification(data.error, 'error');
+                    return false;
+                }
+                
+                showNotification('Player status updated successfully', 'success');
+                return true;
+            } catch (error) {
+                showNotification('Failed to update player status', 'error');
+                return false;
+            }
+        }
+        
+        async function resetLeaderboard() {
+            try {
+                const password = passwordInput.value;
+                const response = await fetch(`https://${API_ENDPOINT}?executeDropTable=${password}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    showNotification(data.error, 'error');
+                    return false;
+                }
+                
+                showNotification('Leaderboard reset successfully', 'success');
+                return true;
+            } catch (error) {
+                showNotification('Failed to reset leaderboard', 'error');
+                return false;
+            }
+        }
+        
+        async function verifyPassword() {
+            try {
+                const result = await fetchPlayers();
+                if (result !== null) {
+                    loginScreen.style.display = 'none';
+                    dashboardScreen.style.display = 'block';
+                    players = result;
+                    renderPlayersTable(players);
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                showNotification('Invalid password', 'error');
+                return false;
+            }
+        }
+        
+        function filterPlayers() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredPlayers = players.filter(player => 
+                player.pseudo.toLowerCase().includes(searchTerm) || 
+                player.uid.toLowerCase().includes(searchTerm)
+            );
+            renderPlayersTable(filteredPlayers);
+        }
+        
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await verifyPassword();
+        });
+        
+        refreshBtn.addEventListener('click', async function() {
+            const result = await fetchPlayers();
+            if (result !== null) {
+                players = result;
+                renderPlayersTable(players);
+                playerDetails.style.display = 'none';
+            }
+        });
+        
+        resetBtn.addEventListener('click', function() {
+            resetModal.style.display = 'flex';
+        });
+        
+        cancelResetBtn.addEventListener('click', function() {
+            resetModal.style.display = 'none';
+        });
+        
+        confirmResetBtn.addEventListener('click', async function() {
+            resetModal.style.display = 'none';
+            
+            const success = await resetLeaderboard();
+            if (success) {
+                const result = await fetchPlayers();
+                if (result !== null) {
+                    players = result;
+                    renderPlayersTable(players);
+                    playerDetails.style.display = 'none';
+                }
+            }
+        });
+        
+        cancelFlagBtn.addEventListener('click', function() {
+            flagModal.style.display = 'none';
+        });
+        
+        confirmFlagBtn.addEventListener('click', async function() {
+            flagModal.style.display = 'none';
+            
+            const success = await flagPlayer(selectedPlayerId);
+            if (success) {
+                const result = await fetchPlayers();
+                if (result !== null) {
+                    players = result;
+                    renderPlayersTable(players);
+                    
+                    if (playerDetails.style.display === 'block' && detailsPlayerId.textContent === selectedPlayerId) {
+                        showPlayerDetails(selectedPlayerId);
+                    }
+                }
+            }
+        });
+        
+        logoutBtn.addEventListener('click', function() {
+            loginScreen.style.display = 'flex';
+            dashboardScreen.style.display = 'none';
+            passwordInput.value = '';
+            players = [];
+        });
+        
+        searchInput.addEventListener('input', filterPlayers);
+        
+        window.addEventListener('click', function(e) {
+            if (e.target === resetModal) {
+                resetModal.style.display = 'none';
+            }
+            if (e.target === flagModal) {
+                flagModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
