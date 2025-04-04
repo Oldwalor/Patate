@@ -24,7 +24,7 @@ require_once("utils.php");
 
 
 function getUserByUid($conn, $uid) {
-    $stmt = $conn->prepare("SELECT pseudo, score FROM leaderboard WHERE uid = ?");
+    $stmt = $conn->prepare("SELECT pseudo, score, games_played FROM leaderboard WHERE uid = ?");
     $stmt->bind_param("s", $uid);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -35,7 +35,8 @@ function getUserByUid($conn, $uid) {
         return [
             "uid" => $uid,
             "pseudo" => $user['pseudo'],
-            "score" => intval($user['score'])
+            "score" => intval($user['score']),
+            "games_played" => $user['games_played']
         ];
     }
     
