@@ -370,8 +370,8 @@ function adjustDifficulty() {
     }
 
     if (score > 200) {
-        minSpacing = 150;
-        maxSpacing = 200;
+        minSpacing = 120;
+        maxSpacing = 150;
         platforms.forEach(plat => {
             plat.y += 2;
         });
